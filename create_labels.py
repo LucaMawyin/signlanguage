@@ -1,93 +1,103 @@
-import cv2
 import mediapipe as mp
+import cv2
 import os
+import time
+import string
 
+# Dictionary with our keys
+chars = list(string.ascii_lowercase) + ["space", "del"]
+key_classes = {char: i for i, char in enumerate(chars)}
+
+# Path setup
+root_dir = "yolo-data-temp/code/data/"
+image_dir = root_dir + "images/train"
+label_dir = root_dir + "labels/train"
+temp_dir = root_dir + "mapped_images_output/"
+os.makedirs(label_dir, exist_ok=True)
+os.makedirs(temp_dir, exist_ok=True)
+
+
+# MediaPipe setup
 mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(static_image_mode=True)
+mp_drawing = mp.solutions.drawing_utils
+mp_drawing_styles = mp.solutions.drawing_styles
 
-root_dir = "yolo-data-temp"
+hands = mp_hands.Hands(
+    static_image_mode=True,
+    max_num_hands=2,
+    min_detection_confidence=0.2,
+)
 
-input_folder = root_dir + "/code/data/images/train"
-output_label_folder = root_dir + "/code/data/labels/train"
-
-os.makedirs(output_label_folder, exist_ok=True)
-
-# -----------------------
-# Build class map
-# -----------------------
-class_names = set()
-
-for img_name in os.listdir(input_folder):
-    if "_" not in img_name:
-        continue
-    class_name = img_name.split("_", 1)[0]
-    class_names.add(class_name)
-
-class_names = sorted(list(class_names))
-class_map = {name: i for i, name in enumerate(class_names)}
-
-print("Class map:", class_map)
-
-# -----------------------
-# Process images
-# -----------------------
-for img_name in os.listdir(input_folder):
-
-    if "_" not in img_name:
+# Label each image in image dir
+for img_name in os.listdir(image_dir):
+    if not img_name.endswith(".jpg"):
         continue
 
-    class_name = img_name.split("_", 1)[0]
+    # Load image 
+    img_path = os.path.join(image_dir, img_name)
+    image = cv2.imread(img_path)
 
-    if class_name not in class_map:
+    if image is None:
         continue
 
-    img_path = os.path.join(input_folder, img_name)
+    h, w, _ = image.shape
 
-    img = cv2.imread(img_path)
-    if img is None:
-        continue
+    # Process hand using mediapipe
+    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    results = hands.process(rgb_image)
 
-    rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    # Image copy for visualization
+    debug_image = image.copy()
 
-    result = hands.process(rgb)
-
-    class_id = class_map[class_name]
-
-    label_lines = []
-
-    if result.multi_hand_landmarks:
-
-        for hand_landmarks in result.multi_hand_landmarks:
-
-            xs = [lm.x for lm in hand_landmarks.landmark]
-            ys = [lm.y for lm in hand_landmarks.landmark]
-
-            x_min, x_max = min(xs), max(xs)
-            y_min, y_max = min(ys), max(ys)
-
-            h, w, _ = img.shape
-
-            x_center = (x_min + x_max) / 2 / w
-            y_center = (y_min + y_max) / 2 / h
-            width = (x_max - x_min) / w
-            height = (y_max - y_min) / h
-
-            keypoints = []
-            for lm in hand_landmarks.landmark:
-                keypoints.append(float(lm.x))
-                keypoints.append(float(lm.y))
-                keypoints.append(2)
-
-            label_line = [class_id, x_center, y_center, width, height] + keypoints
-            label_lines.append(" ".join(map(str, label_line)))
-
-    # ALWAYS write file (important for YOLO consistency)
-    label_path = os.path.join(
-        output_label_folder,
-        os.path.splitext(img_name)[0] + ".txt"
-    )
+    label_path = os.path.join(label_dir, img_name.replace(".jpg", ".txt"))
 
     with open(label_path, "w") as f:
-        f.write("\n".join(label_lines))
 
-print("Done converting to YOLO Pose format")
+        if results.multi_hand_landmarks:
+
+            for hand_landmarks in results.multi_hand_landmarks:
+
+                # -------------------------
+                # DRAW LANDMARKS (like pose)
+                # -------------------------
+                mp_drawing.draw_landmarks(
+                    debug_image,
+                    hand_landmarks,
+                    mp_hands.HAND_CONNECTIONS,
+                    mp_drawing_styles.get_default_hand_landmarks_style(),
+                    mp_drawing_styles.get_default_hand_connections_style()
+                )
+
+                # -------------------------
+                # YOLO BBOX FROM LANDMARKS
+                # -------------------------
+                xs = [lm.x for lm in hand_landmarks.landmark]
+                ys = [lm.y for lm in hand_landmarks.landmark]
+
+                x_min, x_max = min(xs), max(xs)
+                y_min, y_max = min(ys), max(ys)
+
+                x_center = (x_min + x_max) / 2
+                y_center = (y_min + y_max) / 2
+                width = x_max - x_min
+                height = y_max - y_min
+
+                # Getting hand-key class
+                key = img_name.split("_")[0].lower()
+                class_id = key_classes.get(key)
+
+                if class_id is None:
+                    continue
+
+                f.write(f"{class_id} {x_center} {y_center} {width} {height}\n")
+
+
+                # optional debug bbox
+                cv2.rectangle(
+                    debug_image,
+                    (int(x_min * w), int(y_min * h)),
+                    (int(x_max * w), int(y_max * h)),
+                    (0, 255, 0), 2
+                )
+
+    cv2.imwrite(os.path.join(temp_dir, img_name), debug_image)
