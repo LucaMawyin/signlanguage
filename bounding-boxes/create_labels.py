@@ -68,6 +68,18 @@ for img_name in os.listdir(image_dir):
                 x_min, x_max = min(xs), max(xs)
                 y_min, y_max = min(ys), max(ys)
 
+                # padding
+                pad = 0.15
+
+                box_w = x_max - x_min
+                box_h = y_max - y_min
+
+                x_min = max(0, x_min - pad * box_w)
+                x_max = min(1, x_max + pad * box_w)
+
+                y_min = max(0, y_min - pad * box_h)
+                y_max = min(1, y_max + pad * box_h)
+
                 # YOLO format (normalized)
                 x_center = (x_min + x_max) / 2
                 y_center = (y_min + y_max) / 2
