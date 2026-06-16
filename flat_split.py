@@ -13,26 +13,38 @@ lbl_val = root_dir + "/code/data/labels/val"
 os.makedirs(img_val, exist_ok=True)
 os.makedirs(lbl_val, exist_ok=True)
 
-images = [f for f in os.listdir(img_train) if f.endswith(".jpg")]
+# support multiple formats
+images = [
+    f for f in os.listdir(img_train)
+    if f.lower().endswith((".jpg", ".jpeg", ".png"))
+]
+
 random.shuffle(images)
 
 split = int(len(images) * 0.2)
 
-for img in images[:split]:
+val_images = images[:split]
 
-    # move image
-    shutil.move(
-        os.path.join(img_train, img),
-        os.path.join(img_val, img)
-    )
+for img in val_images:
 
-    # label name
-    label = img.replace(".jpg", ".txt")
+    label = os.path.splitext(img)[0] + ".txt"
+
+    src_img = os.path.join(img_train, img)
+    dst_img = os.path.join(img_val, img)
 
     src_lbl = os.path.join(lbl_train, label)
     dst_lbl = os.path.join(lbl_val, label)
 
-    if os.path.exists(src_lbl):
-        shutil.move(src_lbl, dst_lbl)
+    # Only move if label exists AND is not empty
+    if not os.path.exists(src_lbl):
+        print(f"Skipping {img} (no label)")
+        continue
 
-print("Done flat split")
+    if os.path.getsize(src_lbl) == 0:
+        print(f"Skipping {img} (empty label)")
+        continue
+
+    shutil.move(src_img, dst_img)
+    shutil.move(src_lbl, dst_lbl)
+
+print("Done safe split")
