@@ -13,6 +13,7 @@ User discretion is advised when opening.
 
 Install required libraries:
 
+```
 pip install ultralytics
 pip install mediapipe==0.10.14
 pip install opencv-python
@@ -33,3 +34,4 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 
 **Note:**
 Ensure GPU is enabled (CUDA recommended) & modify settings for user device specs
+```
