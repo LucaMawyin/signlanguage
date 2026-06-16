@@ -21,21 +21,25 @@ while True:
         break
 
     # YOLO hand detection
-    results = model(frame, conf=0.05, iou=0.5, verbose=False)
+    results = model(frame, conf=0.25, iou=0.5, verbose=False)
 
     r = results[0]
 
     # Get best detection (if any exist)
     if r.boxes is not None and len(r.boxes) > 0:
         cls_id = int(r.boxes.cls[0])
+        conf = float(r.boxes.conf[0])
         class_name = model.names[cls_id]
+
+        if class_name == "space" and conf < 0.5:
+            continue
 
         # only print if changed
         if class_name != last_class:
             if class_name == "del":
                 text_str = text_str[:-1]
             elif class_name == "space":
-                text_str = " "
+                text_str += " "
             else:
                 text_str += class_name
                 
