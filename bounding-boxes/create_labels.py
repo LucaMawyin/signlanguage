@@ -116,3 +116,8 @@ for img_name in os.listdir(image_dir):
 
 
     cv2.imwrite(os.path.join(temp_dir, img_name), debug_image)
+
+    # Print a message every 100 images
+    count += 1
+    if count % 100 == 0:
+        print(f"[INFO] Processed {count}/{len(os.listdir(image_dir))} images")
