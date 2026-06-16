@@ -53,13 +53,17 @@ for img_name in os.listdir(image_dir):
 
     with open(label_path, "w") as f:
 
-        if results.multi_hand_landmarks:
+        # Getting class for hand gesture
+        key = img_name.split("_")[0].lower()
+        class_id = key_classes.get(key)
 
+        if class_id is None:
+            continue
+
+        if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
 
-                # -------------------------
-                # DRAW LANDMARKS (like pose)
-                # -------------------------
+                # Draw hand landmarks
                 mp_drawing.draw_landmarks(
                     debug_image,
                     hand_landmarks,
@@ -68,9 +72,6 @@ for img_name in os.listdir(image_dir):
                     mp_drawing_styles.get_default_hand_connections_style()
                 )
 
-                # -------------------------
-                # YOLO BBOX FROM LANDMARKS
-                # -------------------------
                 xs = [lm.x for lm in hand_landmarks.landmark]
                 ys = [lm.y for lm in hand_landmarks.landmark]
 
@@ -82,22 +83,41 @@ for img_name in os.listdir(image_dir):
                 width = x_max - x_min
                 height = y_max - y_min
 
-                # Getting hand-key class
-                key = img_name.split("_")[0].lower()
-                class_id = key_classes.get(key)
+                # clamp values
+                x_center = max(0, min(1, x_center))
+                y_center = max(0, min(1, y_center))
+                width = max(0, min(1, width))
+                height = max(0, min(1, height))
 
-                if class_id is None:
-                    continue
-
-                f.write(f"{class_id} {x_center} {y_center} {width} {height}\n")
-
-
-                # optional debug bbox
+                # Bounding box for hand
                 cv2.rectangle(
                     debug_image,
-                    (int(x_min * w), int(y_min * h)),
-                    (int(x_max * w), int(y_max * h)),
-                    (0, 255, 0), 2
+                    (int(x_min * image.shape[1]), int(y_min * image.shape[0])),
+                    (int(x_max * image.shape[1]), int(y_max * image.shape[0])),
+                    (0, 255, 0),
+                    2
                 )
+
+                class_name = chars[class_id]
+
+                cv2.putText(
+                    debug_image,
+                    class_name,
+                    (int(x_min * image.shape[1]), int(y_min * image.shape[0]) - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.8,
+                    (0, 255, 0),
+                    2,
+                    cv2.LINE_AA
+                )
+
+                kpts = []
+                for lm in hand_landmarks.landmark:
+                    kpts.extend([lm.x, lm.y, 1.0])
+
+
+                label = [class_id, x_center, y_center, width, height] + kpts
+
+                f.write(" ".join(map(str, label)) + "\n")
 
     cv2.imwrite(os.path.join(temp_dir, img_name), debug_image)

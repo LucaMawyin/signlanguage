@@ -44,7 +44,7 @@ for img in val_images:
         print(f"Skipping {img} (empty label)")
         continue
 
-    shutil.move(src_img, dst_img)
-    shutil.move(src_lbl, dst_lbl)
+    shutil.copy(src_img, dst_img)
+    shutil.copy(src_lbl, dst_lbl)
 
 print("Done safe split")
