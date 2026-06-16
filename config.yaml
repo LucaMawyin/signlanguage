@@ -4,9 +4,10 @@ val: images/val
 
 names:
   0: a
-  1: b
-  2: c
-  3: del
-  4: space
+  1: d
+  2: del
+  3: h
+  4: i
+  5: space
 
 kpt_shape: [21, 3]
