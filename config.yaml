@@ -1,0 +1,12 @@
+path: /Users/lucamawyin/Desktop/signlanguage/yolo-data-temp/code/data
+train: images/train
+val: images/val
+
+names:
+  0: a
+  1: b
+  2: c
+  3: del
+  4: space
+
+kpt_shape: [21, 3]
