@@ -2,11 +2,13 @@ import os
 import shutil
 import random
 
-img_train = "yolo-data-temp/code/data/images/train"
-img_val = "yolo-data-temp/code/data/images/val"
+root_dir = "yolo-data-temp"
 
-lbl_train = "yolo-data-temp/code/data/labels/train"
-lbl_val = "yolo-data-temp/code/data/labels/val"
+img_train = root_dir + "/code/data/images/train"
+img_val = root_dir + "/code/data/images/val"
+
+lbl_train = root_dir + "/code/data/labels/train"
+lbl_val = root_dir + "/code/data/labels/val"
 
 os.makedirs(img_val, exist_ok=True)
 os.makedirs(lbl_val, exist_ok=True)

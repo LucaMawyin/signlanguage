@@ -5,8 +5,10 @@ import os
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=True)
 
-input_folder = "yolo-data-temp/code/data/images/train"
-output_label_folder = "yolo-data-temp/code/data/labels/train"
+root_dir = "yolo-data-temp"
+
+input_folder = root_dir + "/code/data/images/train"
+output_label_folder = root_dir + "/code/data/labels/train"
 
 os.makedirs(output_label_folder, exist_ok=True)
 
