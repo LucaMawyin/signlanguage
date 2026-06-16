@@ -1,11 +1,19 @@
 from ultralytics import YOLO
 
-# Load a pretrained YOLO26n model
-model = YOLO("yolo26n-pose.pt")
+def main():
 
-# Train the model on the config dataset for 100 epochs
-train_results = model.train(
-    data="config.yaml",  # Path to dataset configuration file
-    epochs=50,  # Number of training epochs
-    device=0 # Nvidia 3080ti
-)
+    # Load a pretrained YOLO26n model
+    model = YOLO("yolo26n-pose.pt")
+
+    # Train the model on the config dataset for 100 epochs
+    model.train(
+        data="config.yaml",  # Path to dataset configuration file
+        epochs=50,  # Number of training epochs
+        device=0, # Nvidia 3080ti
+        workers=8, # 14 cores 20 threads
+    )
+
+    model.val(conf=0.1)
+
+if __name__ == "__main__":
+    main()
