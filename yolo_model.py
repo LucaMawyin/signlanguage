@@ -7,4 +7,5 @@ model = YOLO("yolo26n-pose.pt")
 train_results = model.train(
     data="config.yaml",  # Path to dataset configuration file
     epochs=50,  # Number of training epochs
+    device=0 # Nvidia 3080ti
 )
