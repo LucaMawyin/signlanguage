@@ -5,6 +5,7 @@
 The YOLO folder contains:
 
 - 5600 training images
+- 5600 label files
 - 5600 parsed images
 
 User discretion is advised when opening.
