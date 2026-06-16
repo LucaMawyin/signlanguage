@@ -19,7 +19,8 @@ while True:
         break
 
     # YOLO hand detection
-    results = model(frame, verbose=False)
+    results = model(frame, conf=0.01, iou=0.5, verbose=False)
+    print(len(results[0].boxes))
 
     # force higher confidence visibility
     annotated_frame = results[0].plot(

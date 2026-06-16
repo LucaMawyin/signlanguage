@@ -65,15 +65,17 @@ for img_name in os.listdir(input_folder):
             x_min, x_max = min(xs), max(xs)
             y_min, y_max = min(ys), max(ys)
 
-            x_center = (x_min + x_max) / 2
-            y_center = (y_min + y_max) / 2
-            width = (x_max - x_min)
-            height = (y_max - y_min)
+            h, w, _ = img.shape
+
+            x_center = (x_min + x_max) / 2 / w
+            y_center = (y_min + y_max) / 2 / h
+            width = (x_max - x_min) / w
+            height = (y_max - y_min) / h
 
             keypoints = []
             for lm in hand_landmarks.landmark:
-                keypoints.append(lm.x)
-                keypoints.append(lm.y)
+                keypoints.append(float(lm.x))
+                keypoints.append(float(lm.y))
                 keypoints.append(2)
 
             label_line = [class_id, x_center, y_center, width, height] + keypoints
