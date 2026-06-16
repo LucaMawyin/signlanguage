@@ -20,8 +20,6 @@ pip install opencv-python
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
 
----
-
 ## File Execution Order
 
 ### 1. `create_labels.py`
@@ -35,7 +33,3 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 
 **Note:**
 Ensure GPU is enabled (CUDA recommended) & modify settings for user device specs
-
-```
-
-```
