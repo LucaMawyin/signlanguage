@@ -3,7 +3,7 @@ from ultralytics import YOLO
 def main():
 
     # Load a pretrained YOLO26n model
-    model = YOLO("yolo26n-pose.pt")
+    model = YOLO("yolo26n.pt")
 
     # Train the model on the config dataset for 100 epochs
     model.train(
@@ -11,6 +11,7 @@ def main():
         epochs=50,  # Number of training epochs
         device=0, # Nvidia 3080ti
         workers=8, # 14 cores 20 threads
+        project="runs/detect", # Explicitly state dir (saving to wrong dir)
     )
 
     model.val(conf=0.1)
