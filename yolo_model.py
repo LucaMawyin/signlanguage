@@ -3,7 +3,7 @@ from ultralytics import YOLO
 def main():
 
     # Load a pretrained YOLO26n model
-    model = YOLO("yolo26n.pt")
+    model = YOLO("yolo26m.pt")
 
     # Train the model on the config dataset for 100 epochs
     model.train(
