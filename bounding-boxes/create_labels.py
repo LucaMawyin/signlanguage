@@ -27,6 +27,8 @@ hands = mp_hands.Hands(
     min_detection_confidence=0.2,
 )
 
+count = 0
+
 # Label each image in image dir
 for img_name in os.listdir(image_dir):
     if not img_name.endswith(".jpg"):
