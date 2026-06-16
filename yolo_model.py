@@ -14,7 +14,7 @@ def main():
         project="runs/detect", # Explicitly state dir (saving to wrong dir)
     )
 
-    model.val(conf=0.1)
+    model.val(conf=0.25)
 
 if __name__ == "__main__":
     main()
