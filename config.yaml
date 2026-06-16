@@ -1,6 +1,6 @@
-path: /Users/lucamawyin/Desktop/signlanguage/yolo-data-temp/code/data
-train: images/train
-val: images/val
+path: C:\Users\lucam\Desktop\Code\signlanguage\yolo-data-temp\code\data
+train: images\train
+val: images\val
 
 names:
   0: a
