@@ -63,14 +63,24 @@ for img_name in os.listdir(image_dir):
         if results.multi_hand_landmarks:
 
             for hand_landmarks in results.multi_hand_landmarks:
+                    
+                # Draw hand landmarks to output
+                mp_drawing.draw_landmarks(
+                    debug_image,
+                    hand_landmarks,
+                    mp_hands.HAND_CONNECTIONS,
+                    mp_drawing_styles.get_default_hand_landmarks_style(),
+                    mp_drawing_styles.get_default_hand_connections_style()
+                )
 
+                # x and y values for hand landmarks
                 xs = [lm.x for lm in hand_landmarks.landmark]
                 ys = [lm.y for lm in hand_landmarks.landmark]
 
                 x_min, x_max = min(xs), max(xs)
                 y_min, y_max = min(ys), max(ys)
 
-                # padding
+                # Pad hand box
                 pad = 0.15
 
                 box_w = x_max - x_min
@@ -88,10 +98,10 @@ for img_name in os.listdir(image_dir):
                 width = x_max - x_min
                 height = y_max - y_min
 
-                # write YOLO label
+                # Write YOLO label
                 f.write(f"{class_id} {x_center} {y_center} {width} {height}\n")
 
-                # draw bbox for visualization
+                # Draw bbox for visualization
                 h, w, _ = image.shape
 
                 cv2.rectangle(
@@ -102,7 +112,7 @@ for img_name in os.listdir(image_dir):
                     2
                 )
 
-                # label text
+                # Label text
                 class_name = chars[class_id]
 
                 cv2.putText(

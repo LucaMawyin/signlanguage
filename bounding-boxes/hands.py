@@ -46,7 +46,7 @@ while True:
             print("Current string:", text_str)
             last_class = class_name
 
-    # force higher confidence visibility
+    # Force higher confidence visibility
     annotated_frame = results[0].plot(
         conf=True,
         line_width=2,

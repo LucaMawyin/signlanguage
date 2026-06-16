@@ -15,7 +15,6 @@ hands = mp_hands.Hands(
 )
 
 cap = cv2.VideoCapture(0)
-model = YOLO("runs/pose/train/weights/best.pt")
 
 # Cannot open camera
 if not cap.isOpened():
