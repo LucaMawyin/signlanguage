@@ -21,7 +21,7 @@ while True:
         break
 
     # YOLO hand detection
-    results = model(frame, conf=0.25, iou=0.5, verbose=False)
+    results = model(frame, conf=0.1, iou=0.5, verbose=False)
 
     r = results[0]
 
@@ -39,7 +39,7 @@ while True:
             if class_name == "del":
                 text_str = text_str[:-1]
             elif class_name == "space":
-                text_str += " "
+                text_str += "_"
             else:
                 text_str += class_name
                 
