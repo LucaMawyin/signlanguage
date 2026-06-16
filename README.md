@@ -29,7 +29,7 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 
 ### 2. `yolo_model.py`
 
-- Trains the YOLO model for **50 epochs**
+- Trains the YOLO model for **50 epochs** using a YOLOv26
 
 **Note:**
 Ensure GPU is enabled (CUDA recommended) & modify settings for user device specs
