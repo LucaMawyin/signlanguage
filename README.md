@@ -21,7 +21,7 @@ pip install opencv-python
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
 
-## File Execution Order
+## File Execution Order (If Training New Model)
 
 ### 1. `create_labels.py`
 
