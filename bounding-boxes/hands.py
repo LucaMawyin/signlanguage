@@ -23,41 +23,37 @@ while True:
         break
 
     # YOLO hand detection
-    results = model(frame, conf=0.4, verbose=False)
+    results = model(frame, conf=0.15, verbose=False)
 
     r = results[0]
 
     # Get best detection (if any exist)
     if r.boxes is not None and len(r.boxes) > 0:
+        best_idx = r.boxes.conf.argmax()
 
-        valid = r.boxes.conf > 0.5
-        if valid.any():
-
-            best_idx = r.boxes.conf.argmax()
-
-            cls_id = int(r.boxes.cls[best_idx])
-            conf = float(r.boxes.conf[best_idx])
-            class_name = model.names[cls_id]
+        cls_id = int(r.boxes.cls[best_idx])
+        conf = float(r.boxes.conf[best_idx])
+        class_name = model.names[cls_id]
 
 
-            if class_name == last_class:
-                stable_count += 1
+        if class_name == last_class:
+            stable_count += 1
+        else:
+            stable_count = 0
+            last_class = class_name
+
+        # Only print on stabilized frames
+        if stable_count == required_frames:
+
+            if class_name == "del":
+                text_str = text_str[:-1]
+            elif class_name == "space":
+                text_str += "_"
             else:
-                stable_count = 0
-                last_class = class_name
+                text_str += class_name
 
-            # Only print on stabilized frames
-            if stable_count == required_frames:
-
-                if class_name == "del":
-                    text_str = text_str[:-1]
-                elif class_name == "space":
-                    text_str += "_"
-                else:
-                    text_str += class_name
-
-                print("Current string:", text_str)
-                last_class = class_name
+            print("Current string:", text_str)
+            last_class = class_name
 
     # Force higher confidence visibility
     annotated_frame = results[0].plot(
