@@ -2,7 +2,7 @@ import os
 import shutil
 
 source_dir = r"C:\Users\lucam\Desktop\Code\signlanguage\yolo-data\code\data\images\train"
-target_dir = r"C:\Users\lucam\Desktop\Code\signlanguage\yolo-data\code\data\images\train"
+target_dir = r"C:\Users\lucam\Desktop\Code\signlanguage\yolo-data\code\data\images\train_flat"
 
 os.makedirs(target_dir, exist_ok=True)
 
