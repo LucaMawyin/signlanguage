@@ -2,7 +2,7 @@ import cv2
 from ultralytics import YOLO
 
 cap = cv2.VideoCapture(0)
-model = YOLO("runs/hand_pose-2/weights/best.pt").to("cuda")
+model = YOLO("runs/hand_pose/weights/best.pt").to("cuda")
 
 text_str = ""
 last_class = None
