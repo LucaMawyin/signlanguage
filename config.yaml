@@ -1,4 +1,4 @@
-path: C:\Users\lucam\Desktop\Code\signlanguage\yolo-data-temp\code\data
+path: C:\Users\lucam\Desktop\Code\signlanguage\yolo-data\code\data
 train: images/train
 val: images/train
 

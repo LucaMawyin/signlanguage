@@ -2,7 +2,7 @@ import os
 import shutil
 import random
 
-root_dir = "yolo-data-temp"
+root_dir = "yolo-data"
 
 img_train = root_dir + "/code/data/images/train"
 img_val = root_dir + "/code/data/images/val"

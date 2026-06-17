@@ -8,7 +8,7 @@ chars = list(string.ascii_lowercase) + ["space", "del"]
 key_classes = {char: i for i, char in enumerate(chars)}
 
 # Path setup
-root_dir = "yolo-data-temp/code/data/"
+root_dir = "yolo-data/code/data/"
 image_dir = root_dir + "images/train"
 label_dir = root_dir + "labels/train"
 temp_dir = root_dir + "mapped_images_output/"
