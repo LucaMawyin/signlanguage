@@ -54,6 +54,7 @@ for img_name in os.listdir(image_dir):
 
     with open(label_path, "w") as f:
 
+        # [key]_[number].jpg naming convention
         key = img_name.split("_")[0].lower()
         class_id = key_classes.get(key)
 

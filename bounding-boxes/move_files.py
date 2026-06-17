@@ -10,6 +10,7 @@ print("STARTING")
 print("SOURCE:", source_dir)
 print("TARGET:", target_dir)
 
+# Move files from key folder to flattened folder with [key]_[number].jpg convention
 for folder in os.listdir(source_dir):
 
     folder_path = os.path.join(source_dir, folder)
