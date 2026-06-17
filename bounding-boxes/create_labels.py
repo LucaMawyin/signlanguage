@@ -9,8 +9,8 @@ key_classes = {char: i for i, char in enumerate(chars)}
 
 # Path setup
 root_dir = "yolo-data/code/data/"
-image_dir = root_dir + "images/train"
-label_dir = root_dir + "labels/train"
+image_dir = root_dir + "images/train_flat"
+label_dir = root_dir + "labels/train_flat"
 temp_dir = root_dir + "mapped_images_output/"
 os.makedirs(label_dir, exist_ok=True)
 os.makedirs(temp_dir, exist_ok=True)

@@ -1,6 +1,6 @@
 path: C:\Users\lucam\Desktop\Code\signlanguage\yolo-data\code\data
-train: images/train
-val: images/train
+train: images/train_flat
+val: images/train_flat
 
 names:
   0: a
