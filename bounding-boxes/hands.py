@@ -1,10 +1,14 @@
 import cv2
+import wordsegment
+from wordsegment import segment
 from ultralytics import YOLO
 
+wordsegment.load()
 cap = cv2.VideoCapture(0)
 model = YOLO("runs/hand_pose/weights/best.pt").to("cuda")
 
-text_str = ""
+raw_text_str = ""
+segmented_text = ""
 last_class = None
 stable_count = 0
 required_frames = 10
@@ -48,9 +52,11 @@ while True:
             if class_name == "del" or class_name == "space":
                 continue
             else:
-                text_str += class_name
+                raw_text_str += class_name
 
-            print("Current string:", text_str)
+                words = segment(raw_text_str) # Infer where spaces go
+                segmented_text = " ".join(words)
+
             last_class = class_name
 
     # Force higher confidence visibility
@@ -64,13 +70,11 @@ while True:
     
     # Backspace key
     if key == 8:  # Windows Backspace
-        text_str = text_str[:-1]
-        print("Current string:", text_str)
+        raw_text_str = raw_text_str[:-1]
 
-    # Spacebar
-    if key == 32:
-        text_str += "_"
-        print("Current string:", text_str)
+        # Segment
+        words = segment(raw_text_str)
+        segmented_text = " ".join(words)
     
     # Quit
     if key & 0xFF == ord('q'):
@@ -78,7 +82,7 @@ while True:
 
     cv2.putText(
         annotated_frame,
-        text_str,
+        segmented_text,
         (20, 50),
         cv2.FONT_HERSHEY_SIMPLEX,
         1,
