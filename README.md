@@ -9,7 +9,7 @@ This project implements a YOLO model to detect user hand gestures of the ASL alp
 The model was trained on 5600 images, with each gesture composing of 200 images, using a YOLOv26m model for 200 epochs with 12 workers, batch size 16, and a patience of 40. The specs of the PC that ran the initial model are as follows:
 
 - CPU: Intel Core i5 13600kf
-- GPU: Nvidia RTX 3080 Ti 15G VRAM
+- GPU: Nvidia RTX 3080 Ti 12G VRAM
 - RAM: 48G 3200MHz
 
 ## Limitations
