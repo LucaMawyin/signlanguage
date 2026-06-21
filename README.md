@@ -31,10 +31,10 @@ User discretion is advised when opening.
 Install required libraries:
 
 ```
-pip install ultralytics
-pip install mediapipe==0.10.14
 pip install opencv-python
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install ultralytics
+pip install mediapipe==0.10.14
 pip install wordsegment
 pip install pyttsx3
 ```
